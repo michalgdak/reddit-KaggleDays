@@ -26,8 +26,8 @@ import tensorflow as tf
 
 MAX_WORDS_NO = 100 #based on histogram data
 WORD2VEC_NO_OF_FEATURES = 300 #number of features of a Word2Vec model
-FILTER_SIZES = [3, 5]
-NUM_FILTERS = [128, 256]
+FILTER_SIZES = [13, 15]
+NUM_FILTERS = [256, 128]
 
 
 def initTokenizers():
@@ -194,21 +194,20 @@ def crateTrainEvaluateLSTMModel(y_train, y_test, X_train, X_test, savedModelName
     #Plot and save model
     plotAndSaveModel(savedModelName, model, history)
 
+
+def createEarlyStopping():
+    return callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=1, mode='auto')
+
 '''
 Builds simple CNN model using Conv1D layers
 '''
-
-def createEarlyStopping():
-    return callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=0, mode='auto')
-
-
 def createCNNModel(w2v_model, word2index, trainable, learning_rate, lr_decay):
     model = Sequential()
     
     model.add(createKerasEmbeddingLayer(w2v_model, word2index, trainable))
     #workaround for known bug in Keras https://github.com/keras-team/keras/issues/4978
     model.add(Lambda(lambda x: x, output_shape=lambda s:s))
-    model.add(Dropout(0.4))
+    model.add(Dropout(0.3))
     
     model.add(Conv1D(NUM_FILTERS[0], 
                      FILTER_SIZES[0], 
@@ -229,9 +228,9 @@ def createCNNModel(w2v_model, word2index, trainable, learning_rate, lr_decay):
                      bias_regularizer = regularizers.l2(1e-6),
                      activity_regularizer = regularizers.l2(1e-6)))
     model.add(MaxPooling1D(4,strides=1, padding='valid'))
-    model.add(Dropout(0.4))
+    model.add(Dropout(0.3))
     model.add(Flatten())
-    model.add(Dropout(0.4))
+    model.add(Dropout(0.3))
     
     model.add(Dense(units=1))
     
