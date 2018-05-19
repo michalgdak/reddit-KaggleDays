@@ -26,8 +26,8 @@ import tensorflow as tf
 
 MAX_WORDS_NO = 100 #based on histogram data
 WORD2VEC_NO_OF_FEATURES = 300 #number of features of a Word2Vec model
-FILTER_SIZES = [3, 5, 7]
-NUM_FILTERS = [256, 512, 1024]
+FILTER_SIZES = [3, 5]
+NUM_FILTERS = [128, 256]
 
 
 def initTokenizers():
@@ -344,8 +344,7 @@ def load_data(filename):
 
 
 def rmsle(y, y0):
-    assert len(y) == len(y0)
-    return np.sqrt(np.mean((np.log1p(y) - np.log1p(y0)) ** 2))
+    return K.sqrt(K.mean(K.square(tf.log1p(y) - tf.log1p(y0))))
 
 
 def main(args):
