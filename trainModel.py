@@ -169,11 +169,10 @@ def createSimpleLSTMWithEmbeddingModel(w2v_model, word2index, trainable, learnin
                    kernel_regularizer = regularizers.l2(1e-7),
                    bias_regularizer = regularizers.l2(1e-7),
                    activity_regularizer = regularizers.l2(1e-7)))
-    model.add(Dense(1, 
-                    activation='sigmoid'))
+    model.add(Dense(1))
     
     rms = Adam(decay=lr_decay, lr=learning_rate)
-    model.compile(loss='binary_crossentropy', optimizer=rms, metrics=['accuracy'])
+    model.compile(loss=rmsle, optimizer=rms, metrics=['accuracy'])
     
     return model
 
