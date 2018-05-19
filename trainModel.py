@@ -172,7 +172,7 @@ def createSimpleLSTMWithEmbeddingModel(w2v_model, word2index, trainable, learnin
     model.add(Dense(1))
     
     rms = Adam(decay=lr_decay, lr=learning_rate)
-    model.compile(loss='mean_squared_error', optimizer=rms, metrics=[rmsle, 'accuracy'])
+    model.compile(loss=rmsle, optimizer=rms, metrics=['accuracy'])
     
     return model
 
@@ -237,7 +237,7 @@ def createCNNModel(w2v_model, word2index, trainable, learning_rate, lr_decay):
     
     # this creates a model
     rms = RMSprop(lr=learning_rate, decay=lr_decay)
-    model.compile(loss='mean_squared_error', optimizer=rms, metrics=[rmsle, 'accuracy'])
+    model.compile(loss=rmsle, optimizer=rms, metrics=['accuracy'])
     
     return model
 
